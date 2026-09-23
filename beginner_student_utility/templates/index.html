@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Study Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📘 Student Study Assistant</h1>
+        <p class="subtitle">
+            AI-powered notes summarizer, quiz generator, answer improver, and
+            concept explainer — pick a task, paste your text, and generate.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="task">Choose a task</label>
+            <select name="task" id="task">
+                {% for key, label in tasks.items() %}
+                    <option value="{{ key }}" {% if key == selected_task %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="content">Paste your notes, question, or draft answer</label>
+            <textarea name="content" id="content" rows="10" placeholder="Paste text here...">{{ input_text }}</textarea>
+
+            <button type="submit">Generate</button>
+        </form>
+
+        {% if result %}
+        <div class="result">
+            <h2>Result</h2>
+            <pre>{{ result }}</pre>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
